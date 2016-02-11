@@ -38,6 +38,8 @@
     OLFacebookImagePickerController *picker = [[OLFacebookImagePickerController alloc] init];
     picker.selected = self.selected;
     picker.delegate = self;
+    picker.hideDoneButton = YES;
+    picker.leftCancelTitle = @"Cancel";
    [self presentViewController:picker animated:YES completion:nil];
 }
 
