@@ -39,5 +39,8 @@
  Holds the currently user selected images in the picker UI. Setting this property will result in the corresponding images in the picker UI updating.
  */
 @property (nonatomic, copy) NSArray/*<OLFacebookImage>*/ *selected;
+@property (nonatomic) NSString* leftCancelTitle;
+@property (nonatomic) BOOL hideDoneButton;
+@property (nonatomic) NSString* photo;
 
 @end

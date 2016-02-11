@@ -24,13 +24,19 @@
     UIViewController *vc = [[UIViewController alloc] init];
     vc.view.backgroundColor = [UIColor whiteColor];
     vc.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonClicked)];
+
     if (self = [super initWithRootViewController:vc]) {
-        if ([FBSDKAccessToken currentAccessToken]){
-            [self showAlbumList];
-        }
+
     }
-    
     return self;
+}
+
++(UIViewController *)rootViewController {
+    UIViewController *vc = [[UIViewController alloc] init];
+    vc.view.backgroundColor = [UIColor whiteColor];
+    vc.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonClicked)];
+
+    return vc;
 }
 
 - (void)cancelButtonClicked{
@@ -60,12 +66,22 @@
                 }
             });
         }
+    } else {
+        [self showAlbumList];
     }
 }
 
 - (void)showAlbumList{
     OLAlbumViewController *albumController = [[OLAlbumViewController alloc] init];
     self.albumVC = albumController;
+    self.albumVC.hideDoneButton = _hideDoneButton;
+    if(_leftCancelTitle) {
+        self.albumVC.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:_leftCancelTitle
+                                                                                         style:UIBarButtonItemStylePlain
+                                                                                        target:self
+                                                                                        action:@selector(cancelButtonClicked)];
+    }
+    
     self.albumVC.delegate = self;
     self.viewControllers = @[albumController];
 }
