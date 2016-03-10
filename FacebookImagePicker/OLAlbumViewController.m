@@ -79,8 +79,6 @@ static const NSUInteger kAlbumPreviewImageSize = 78;
     if (self = [self initWithNibName:NSStringFromClass([OLAlbumViewController class]) bundle:currentBundle]) {
         self.title = @"Photos";
         self.albums = [[NSMutableArray alloc] init];
-        _shouldDisplayDoneButton = YES;
-        _shouldDisplayLogoutButton = YES;
     }
     return self;
 }
@@ -88,10 +86,6 @@ static const NSUInteger kAlbumPreviewImageSize = 78;
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
-    if (self.shouldDisplayLogoutButton) {
-        [self addLogoutButtonAnimated:NO];
-    }
     
     self.albumRequestForNextPage = [[OLFacebookAlbumRequest alloc] init];
     [self loadNextAlbumPage];

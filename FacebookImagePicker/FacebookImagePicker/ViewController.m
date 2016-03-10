@@ -38,9 +38,7 @@
     OLFacebookImagePickerController *picker = [[OLFacebookImagePickerController alloc] init];
     picker.selected = self.selected;
     picker.delegate = self;
-    picker.shouldDisplayDoneButton = NO;
-    picker.shouldDisplayLogoutButton = NO;
-    picker.leftCancelTitle = @"Cancel";
+    picker.shouldDisplayCancelButton = YES;
    [self presentViewController:picker animated:YES completion:nil];
 }
 
