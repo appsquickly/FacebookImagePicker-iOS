@@ -27,6 +27,6 @@
 
 @property (nonatomic, weak) id<OLPhotoViewControllerDelegate> delegate;
 @property (nonatomic, strong) NSArray/*<OLFacebookImage>*/ *selected;
-@property (nonatomic) BOOL hideDoneButton;
+@property (nonatomic) BOOL shouldDisplayDoneButton;
 
 @end

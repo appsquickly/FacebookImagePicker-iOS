@@ -40,7 +40,9 @@
  */
 @property (nonatomic, copy) NSArray/*<OLFacebookImage>*/ *selected;
 @property (nonatomic) NSString* leftCancelTitle;
-@property (nonatomic) BOOL hideDoneButton;
 @property (nonatomic) NSString* photo;
+
+@property (nonatomic, assign) BOOL shouldDisplayDoneButton;
+@property (nonatomic, assign) BOOL shouldDisplayLogoutButton;
 
 @end

@@ -22,5 +22,6 @@
 @interface OLAlbumViewController : UIViewController
 @property (nonatomic, weak) id<OLAlbumViewControllerDelegate> delegate;
 @property (nonatomic, strong) NSArray/*<OLFacebookImage>*/ *selected;
-@property (nonatomic) BOOL hideDoneButton;
+@property (nonatomic, assign) BOOL shouldDisplayDoneButton;
+@property (nonatomic, assign) BOOL shouldDisplayLogoutButton;
 @end

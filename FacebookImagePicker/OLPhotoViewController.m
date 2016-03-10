@@ -49,7 +49,7 @@ static NSString *const kSupplementaryViewFooterReuseIdentifier = @"co.oceanlabs.
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    if (!_hideDoneButton) {
+    if (_shouldDisplayDoneButton) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(onButtonDoneClicked)];
     }
     

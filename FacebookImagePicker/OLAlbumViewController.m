@@ -11,6 +11,9 @@
 #import "OLFacebookAlbum.h"
 #import "OLPhotoViewController.h"
 #import "UIImageView+FacebookFadeIn.h"
+#import <FBSDKLoginKit/FBSDKLoginManager.h>
+#import <FBSDKCoreKit/FBSDKAccessToken.h>
+#import <FBSDKCoreKit/FBSDKGraphRequest.h>
 
 static const NSUInteger kAlbumPreviewImageSize = 78;
 
@@ -76,6 +79,8 @@ static const NSUInteger kAlbumPreviewImageSize = 78;
     if (self = [self initWithNibName:NSStringFromClass([OLAlbumViewController class]) bundle:currentBundle]) {
         self.title = @"Photos";
         self.albums = [[NSMutableArray alloc] init];
+        _shouldDisplayDoneButton = YES;
+        _shouldDisplayLogoutButton = YES;
     }
     return self;
 }
@@ -84,8 +89,8 @@ static const NSUInteger kAlbumPreviewImageSize = 78;
     [super viewDidLoad];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
-    if(!_hideDoneButton) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(onButtonDoneClicked)];
+    if (self.shouldDisplayLogoutButton) {
+        [self addLogoutButtonAnimated:NO];
     }
     
     self.albumRequestForNextPage = [[OLFacebookAlbumRequest alloc] init];
@@ -108,6 +113,28 @@ static const NSUInteger kAlbumPreviewImageSize = 78;
         [self.delegate albumViewController:self didFailWithError:error];
         
     }
+    
+    if(_shouldDisplayDoneButton) {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(onButtonDoneClicked)];
+    }
+}
+
+- (void)setShouldDisplayLogoutButton:(BOOL)shouldDisplayLogoutButton
+{
+    _shouldDisplayLogoutButton = shouldDisplayLogoutButton;
+    
+    if (shouldDisplayLogoutButton && (self.navigationItem.leftBarButtonItem == nil)) {
+        [self addLogoutButtonAnimated:YES];
+    }
+    else if (!shouldDisplayLogoutButton && (self.navigationItem.leftBarButtonItem != nil)) {
+        [self.navigationItem setLeftBarButtonItem:nil animated:YES];
+    }
+}
+
+- (void)addLogoutButtonAnimated:(BOOL)animated
+{
+    [self.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(onButtonLogoutClicked)]
+                                     animated:animated];
 }
 
 - (void)loadNextAlbumPage {
@@ -161,6 +188,11 @@ static const NSUInteger kAlbumPreviewImageSize = 78;
     [self.delegate albumViewControllerDoneClicked:self];
 }
 
+- (void)onButtonLogoutClicked {
+    [[FBSDKLoginManager new] logOut];
+    [self.delegate albumViewControllerDoneClicked:self];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self updateSelectedFromPhotoViewController];
@@ -199,7 +231,7 @@ static const NSUInteger kAlbumPreviewImageSize = 78;
     self.photoViewController = [[OLPhotoViewController alloc] initWithAlbum:album];
     self.photoViewController.selected = self.selected;
     self.photoViewController.delegate = self;
-    self.photoViewController.hideDoneButton = _hideDoneButton;
+    self.photoViewController.shouldDisplayDoneButton = _shouldDisplayDoneButton;
     [self.navigationController pushViewController:self.photoViewController animated:YES];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

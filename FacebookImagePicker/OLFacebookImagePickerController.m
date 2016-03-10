@@ -26,7 +26,10 @@
     vc.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonClicked)];
 
     if (self = [super initWithRootViewController:vc]) {
-
+        _shouldDisplayLogoutButton = YES;
+        if ([FBSDKAccessToken currentAccessToken]){
+            [self showAlbumList];
+        }
     }
     return self;
 }
@@ -74,7 +77,6 @@
 - (void)showAlbumList{
     OLAlbumViewController *albumController = [[OLAlbumViewController alloc] init];
     self.albumVC = albumController;
-    self.albumVC.hideDoneButton = _hideDoneButton;
     if(_leftCancelTitle) {
         self.albumVC.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:_leftCancelTitle
                                                                                          style:UIBarButtonItemStylePlain
@@ -83,6 +85,8 @@
     }
     
     self.albumVC.delegate = self;
+    self.albumVC.shouldDisplayLogoutButton = self.shouldDisplayLogoutButton;
+    self.albumVC.shouldDisplayDoneButton = self.shouldDisplayDoneButton;
     self.viewControllers = @[albumController];
 }
 
@@ -92,6 +96,12 @@
 
 - (NSArray *)selected {
     return self.albumVC.selected;
+}
+
+- (void)setShouldDisplayLogoutButton:(BOOL)shouldDisplayLogoutButton
+{
+    _shouldDisplayLogoutButton = shouldDisplayLogoutButton;
+    self.albumVC.shouldDisplayLogoutButton = self.shouldDisplayLogoutButton;
 }
 
 #pragma mark - OLAlbumViewControllerDelegate methods
