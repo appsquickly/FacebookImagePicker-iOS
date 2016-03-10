@@ -69,8 +69,6 @@
                 }
             });
         }
-    } else {
-        [self showAlbumList];
     }
 }
 
